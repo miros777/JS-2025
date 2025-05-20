@@ -49,7 +49,8 @@
 
     function inputValidation(value){
         const keyValArray = value.split('=');
-        const pattern = /^(?=.*?\d)(?=.*?[a-zA-Z])[a-zA-Z\d]+$/;
+        // const pattern = /^(?=.*?\d)(?=.*?[a-zA-Z])[a-zA-Z\d]+$/;
+        const pattern = /^[a-zA-Z0-9_.-]*$/;
 
         const keyInput = pattern.test(keyValArray[0]);
         const valueInput = pattern.test(keyValArray[1]);
@@ -60,7 +61,7 @@
             let msg = 'correct';
             return {msg: msg, status: true};
         }else{
-            let msg = 'incorrect. Example: names=Vasya';
+            let msg = 'Incorrect. Use letters or numbers';
             return {msg: msg, status: false};
         }
     }
