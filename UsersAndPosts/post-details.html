@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="menu"></div>
+<div id="main"></div>
+<script>
+    const url = new URL(window.location.href);
+    const post_id = url.searchParams.get('post_id').toString();
+
+    let post = fetch('https://jsonplaceholder.typicode.com/posts/' + post_id)
+        .then(value => value.json());
+    let comments = fetch('https://jsonplaceholder.typicode.com/posts/' + post_id + '/comments')
+        .then(value => value.json());
+
+    const mainDiv = document.getElementById('main');
+
+    Promise.all([post, comments]).then(result => {
+        let [postData, comments] = result;
+
+        const divPostWrapper = document.createElement('div');
+        divPostWrapper.className = 'post-wrapper-full';
+        const divTitle = document.createElement('div');
+        const divBody = document.createElement('div');
+        const divUserID = document.createElement('div');
+        const divID = document.createElement('div');
+
+        divTitle.innerText = postData.title;
+        divBody.innerText = postData.body;
+        divUserID.innerText = postData.userId;
+        divID.innerText = postData.id;
+
+        divPostWrapper.append(divTitle, divBody, divUserID, divID);
+
+        mainDiv.appendChild(divPostWrapper);
+
+        const commentsAll = document.createElement('div');
+        commentsAll.setAttribute('id', 'comments');
+        for (const comment of comments) {
+            const commentDiv = document.createElement('div');
+            commentDiv.classList.add('comment-wrapper');
+            commentDiv.innerText = `postId: ${comment.postId}
+                        id: ${comment.id}
+                        name: ${comment.name}
+                        email: ${comment.email}
+                        body: ${comment.body}
+            `;
+            commentsAll.appendChild(commentDiv);
+        }
+        mainDiv.appendChild(commentsAll);
+
+    });
+
+</script>
+<script src="menu/menu.js" type="text/javascript"></script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+<div class="wrapper">
+    <form name="formDataValue">
+        <div class="input-wrapper">
+            <div id="msg"></div>
+            <label for="nameValue">
+                <input id="nameValue" type="text" name="dataValue" value="" placeholder="Example: names=Vasya">
+            </label>
+            <button id="submit" class="btn" type="submit" disabled>Add</button>
+        </div>
+
+        <div class="text-wrapper">
+            <label for="nameTextarea">
+                <textarea id="nameTextarea" name="textareaText" rows="20" cols="50"></textarea>
+            </label>
+        </div>
+        <div class="buttons">
+            <button id="sortName" class="btn" type="button">Sort by name</button>
+            <button id="SortValue" class="btn" type="button">Sort by value</button>
+            <button id="delete" class="btn" type="button">Delete</button>
+            <div>
+                <p>If you want to delete. Selected as shown on photo and put DELETE</p>
+                <img src="img/example.png" alt="Example">
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    let form = document.forms['formDataValue'];
+    let inp = form["dataValue"];
+
+    let btnSort = document.getElementById('sortName');
+    let btnSortValue = document.getElementById('SortValue');
+    let deleteBtn = document.getElementById('delete');
+
+    let textAres = form.textareaText;
+
+    function inputValidation(value){
+        const keyValArray = value.split('=');
+        const pattern = /^(?=.*?\d)(?=.*?[a-zA-Z])[a-zA-Z\d]+$/;
+
+        const keyInput = pattern.test(keyValArray[0]);
+        const valueInput = pattern.test(keyValArray[1]);
+
+        if(keyInput && valueInput){
+            document.getElementById('submit').removeAttribute('disabled');
+            document.getElementById('submit').classList.remove('btn-disable');
+            let msg = 'correct';
+            return {msg: msg, status: true};
+        }else{
+            let msg = 'incorrect. Example: names=Vasya';
+            return {msg: msg, status: false};
+        }
+    }
+
+    inp.addEventListener('change', function () {
+        let validation = inputValidation(this.value);
+        let msgDiv = document.getElementById('msg');
+        msgDiv.innerText = validation.msg;
+
+        if (this.value !== '' && validation.status) {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                document.location.reload();
+
+                let dataInput = inp.value;
+
+                let arrV = separCustom(dataInput);
+                let obj = {name: arrV[0].trim(), value: arrV[1].trim()};
+
+                let data = localStorage.getItem('data');
+
+                if (data) {
+                    let jsonParse = JSON.parse(localStorage.getItem('data'));
+                    jsonParse.push(obj);
+                    localStorage.setItem('data', JSON.stringify(jsonParse));
+                } else {
+                    localStorage.setItem('data', JSON.stringify([obj]));
+                }
+
+                inp.value = '';
+                getLocalStForTextarea();
+            });
+        }
+    });
+
+    //sort by name
+    btnSort.addEventListener('click', function () {
+        let result = JSON.parse(localStorage.getItem('data'));
+
+        result.sort(function (a, b) {
+            if (a.name < b.name) {
+                return -1;
+            }
+            if (a.name > b.name) {
+                return 1
+            }
+            if (a.name === b.name) {
+                return 0
+            }
+        });
+        textAres.value = convertData(result);
+    });
+
+    //sort by name value
+    btnSortValue.addEventListener('click', function () {
+        let result = JSON.parse(localStorage.getItem('data'));
+        result.sort(function (a, b) {
+            if (a.value < b.value) {
+                return -1;
+            }
+            if (a.value > b.value) {
+                return 1
+            }
+            if (a.value === b.value) {
+                return 0
+            }
+        });
+        textAres.value = convertData(result);
+    });
+
+    let separCustom = function (str) {
+        return str.split('=');
+    }
+
+    function getLocalStForTextarea() {
+        let json = JSON.parse(localStorage.getItem('data'));
+        textAres.value = convertData(json);
+    }
+
+    //Converter JSON to our format name=value
+    function convertData(arr) {
+        let res = '';
+        for (const obj of arr) {
+            res += (`${obj.name}=${obj.value}\n`);
+        }
+        return res;
+    }
+
+    getLocalStForTextarea();
+
+    textAres.addEventListener('select', select.bind(textAres));
+
+    function select() {
+        let from = textAres.selectionStart;
+        let to = textAres.selectionEnd;
+        let fromTO = textAres.value.slice(from, to);
+        return fromTO.split('\n');
+    }
+
+    deleteBtn.addEventListener('click', function () {
+        let json = JSON.parse(localStorage.getItem('data'));
+        let selectArray = select();
+
+        for (const jsonKey of json) {
+
+            for (const arrElem of selectArray) {
+                console.log(jsonKey);
+                let oneElem = separCustom(arrElem);
+                if (oneElem[0] === jsonKey.name && oneElem[1] === jsonKey.value) {
+                    delElem(jsonKey);
+                }
+            }
+        }
+        getLocalStForTextarea();
+    });
+
+    function delElem(obj) {
+        let json = JSON.parse(localStorage.getItem('data'));
+        json.forEach((item,index) => {
+            if(item.name === obj.name) {
+                console.log(item[index]);
+                json.splice(index, 1);
+            }
+        });
+        localStorage.setItem('data', JSON.stringify(json));
+    }
+
+</script>
+</body>
+</html>

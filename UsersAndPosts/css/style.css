@@ -1,0 +1,84 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0
+}
+
+ul, li {
+    text-decoration: none;
+    list-style-type: none;
+}
+#menu, .post-wrapper-full{
+    padding: 15px;
+}
+#main, #posts, #comments {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.user-wrapper {
+    width: 50%;
+    min-width: 300px;
+    padding: 15px;
+}
+
+.user-wrapper-full {
+    width: 90%;
+    min-width: 300px;
+    padding: 15px;
+    margin: 10px auto;
+    text-align: center;
+}
+
+.post-wrapper, .comment-wrapper {
+    width: 18%;
+    min-width: auto;
+    padding: 15px 10px;
+    min-height: 130px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: antiquewhite;
+    margin: 1%;
+
+}
+
+.comment-wrapper {
+    width: 23%;
+}
+
+button, a {
+    padding: 3px;
+    min-width: 100px;
+    width: 100%;
+    height: 50px;
+    color: white;
+    background: red;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+}
+
+.post-title {
+    min-height: 40px;
+    font-size: 14px;
+    font-weight: bold;
+}
+.disable{
+        cursor: not-allowed;
+        background: gainsboro;
+}
+.post-wrapper-full{
+    margin: 0 auto;
+    text-align: center;
+}
+.post-wrapper-full div:first-child{
+    font-weight: 600;
+    font-size: 20px;
+    text-transform: uppercase;
+}

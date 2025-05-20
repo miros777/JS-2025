@@ -1,0 +1,54 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+.wrapper{
+    margin: 20px auto;
+    text-align: center;
+    min-width: 300px;
+    width: 50%;
+}
+input{
+    height: 50px;
+}
+textarea,input{
+    padding: 5px;
+}
+input, label,textarea {
+    width: 100%;
+}
+
+.input-wrapper button{
+    width: 100%;
+}
+.btn{
+    text-transform: uppercase;
+    background: red;
+    font-size: 18px;
+    font-weight: 800;
+    color: aliceblue;
+    height: 50px;
+    min-width: 100px;
+    width: 100%;
+    border: none;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+}
+.btn:hover{
+    cursor: pointer;
+    background: green;
+
+}
+.btn.btn-disable{
+    background-color: #9E9E9E;
+    cursor: not-allowed;
+}
+#msg{
+    position: absolute;
+    top: 0;
+    color: rebeccapurple;
+}
+.buttons img{
+    width: 90px;
+}

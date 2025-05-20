@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="menu"></div>
+<div id="main"></div>
+<script>
+    let users = fetch('https://jsonplaceholder.typicode.com/users')
+        .then(value => value.json());
+
+    const mainDiv = document.getElementById('main');
+
+    Promise.all([users]).then(users => {
+
+
+        for (const user of users[0]) {
+            const div = document.createElement('div');
+            div.classList.add('user-wrapper');
+            const divID = document.createElement('div');
+            const divName = document.createElement('div');
+            const divEmail = document.createElement('div');
+            const link = document.createElement('a');
+            link.href = 'user-details.html?id=' + user.id.toString();
+
+            divID.innerText = 'ID: ' + user.id;
+            divName.innerText = 'Name: ' + user.name;
+            divEmail.innerText = 'Email: ' + user.email;
+            link.innerText = 'More...';
+
+            div.append(divID, divName, divEmail, link);
+
+            mainDiv.appendChild(div);
+        }
+});
+
+</script>
+<script src="menu/menu.js" type="text/javascript"></script>
+</body>
+</html>
